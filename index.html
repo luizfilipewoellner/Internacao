@@ -192,7 +192,7 @@ button{
     <div class="grid g3">
       <div class="field"><label>7 · Número da Carteira</label><input type="text" id="f7"></div>
       <div class="field"><label>9 · Atendimento a RN</label>
-        <select id="f9"><option value=""></option><option value="S">Sim</option><option value="N">Não</option></select>
+        <select id="f9"><option value="">— Selecione —</option><option value="S">Sim</option><option value="N" selected>Não</option></select>
       </div>
       <div class="field"><label>10 · Nome</label><input type="text" id="f10"></div>
     </div>
@@ -390,6 +390,7 @@ document.getElementById('clearProcs').addEventListener('click', ()=>{
 
 document.getElementById('clearBtn').addEventListener('click', ()=>{
   document.querySelectorAll('input, textarea, select').forEach(el=>{ el.value=''; });
+  document.getElementById('f9').value = 'N';
   document.getElementById('status').textContent='';
 });
 
@@ -540,8 +541,10 @@ async function generatePdf(){
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    const nome = (v('f10') || 'guia').replace(/[^a-zA-Z0-9]+/g,'_');
-    a.download = `guia_internacao_${nome}.pdf`;
+    const nomePaciente = (v('f10') || 'paciente').trim().replace(/[^a-zA-Z0-9À-ÿ\s]+/g,'').replace(/\s+/g,'_');
+    const dataIso = v('f46');
+    const dataFormatada = dataIso ? fmtDate(dataIso).replace(/\//g,'-') : fmtDate(new Date().toISOString().slice(0,10)).replace(/\//g,'-');
+    a.download = `Guia_${nomePaciente}_${dataFormatada}.pdf`;
     document.body.appendChild(a);
     a.click();
     a.remove();
