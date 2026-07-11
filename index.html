@@ -761,6 +761,7 @@ async function buildPdfBytes(){
 }
 
 function nomeArquivoGuia(){
+  const v = id => (document.getElementById(id) ? document.getElementById(id).value : '');
   const nomePaciente = (v('f10') || 'paciente').trim().replace(/[^a-zA-Z0-9À-ÿ\s]+/g,'').replace(/\s+/g,'_');
   const dataIso = v('f46');
   const dataFormatada = dataIso ? fmtDate(dataIso).replace(/\//g,'-') : fmtDate(new Date().toISOString().slice(0,10)).replace(/\//g,'-');
